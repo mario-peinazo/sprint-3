@@ -71,6 +71,8 @@ var cart = [];
 
 var total = 0;
 
+var totalDescuento = 0;
+
 // Exercise 1
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
@@ -91,7 +93,13 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
-    cartList = [];
+  //  cartList = [];
+
+  cart = [];
+  total = 0;
+  totalDescuento = 0;
+
+  printCart();
 }
 
 // Exercise 3
@@ -105,6 +113,7 @@ function calculateTotal() {
         suma += cartList[i].price;
     }
     console.log(suma)
+
     return suma
 }
 
@@ -152,77 +161,90 @@ function buscar(varTemp) {
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
 
-    let aceite1;
-    let pastel1;
+    let descOil = 0;
+    let descPastel = 0;
+    let promo = 0;
 
     for (x in cart) {
 
         if((cart[x].id == 1) && (cart[x].cantidad >= 3)) {
 
             let cantOil = cart[x].cantidad;
-            let descOil = 0.5 * cantOil;
+            descOil = 0.5 * cantOil;
 
             let swdOil = cart[x].subtotal - descOil;
 
             cart[x].subtotalWithDiscount = swdOil;
-
-            aceite1 = cart[x].subtotal;
+        } else if ((cart[x].id == 1) && (cart[x].cantidad < 3)) {
+            cart[x].subtotalWithDiscount = 0;
         }
 
         if((cart[x].id == 3) && (cart[x].cantidad >= 10)) {
 
             let cantPastel = cart[x].cantidad;
-            let descPastel = (cantPastel / 3) * 2;
+            descPastel = Number(((cantPastel / 3) * 2).toFixed(2));
 
-            let subPastel = cantPastel * cart[x].price;
             let swdPastel = cart[x].subtotal - descPastel;
 
-            cart[x].subtotalWithDiscount = Number(swdPastel.toFixed(2));
-
-            pastel2 = cart[x].subtotalWithDiscount;
+            cart[x].subtotalWithDiscount = swdPastel;
+        } else if ((cart[x].id == 3) && (cart[x].cantidad < 10)) {
+            cart[x].subtotalWithDiscount = 0;
         }
     }
-    return (aceite1, pastel1)
+    promo = descOil + descPastel;
+    return (promo);
 }
 
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
 
-    generateCart();
+   // generateCart();
 
-    let descuento = 0;
+   document.getElementById("cart_list").innerHTML = "";
 
-    document.getElementById("cart_list").innerHTML = "";
+   if (cart.length == 0) {
 
-    for (let i = 0; i < cart.length; i++) {
+    document.getElementById("total_price").innerHTML = "0";
+
+   } else {  
+    
+        for (let i = 0; i < cart.length; i++) {
 
         let SubPrecio = cart[i].subtotalWithDiscount;
         let precioTot = 0;
         let precioTotSub = 0;
         let lineaPrecio;
 
+        console.log(SubPrecio)
 
         if (SubPrecio > 0) {
             precioTotSub = cart[i].subtotalWithDiscount;
             precioTot = cart[i].subtotal;
-            lineaPrecio = `<td style="color:green">$${precioTot} -> $${precioTotSub}</td>`
-            descuento = cart[i].subtotal - cart[i].subtotalWithDiscount;
+            lineaPrecio = `<td style="color:green">$${precioTot} -> $${precioTotSub}</td>` ;
+
         } else {
             precioTot = cart[i].subtotal;
             lineaPrecio = `<td>$${precioTot}</td>`
-        }
-        
+
+        }       
         let linea = `<tr>
         <th scope="row">${cart[i].name}</th>
         <td>$${cart[i].price}</td>
-        <td>${cart[i].cantidad}</td>
+        <td class="text-center"><button onclick="addToCart(${cart[i].id})">+</button> ${cart[i].cantidad} <button onclick="removeFromCart(${cart[i].id})">-</button></td>
         ${lineaPrecio}
         </tr>`;
 
+        if (totalDescuento == 0) {
+            document.getElementById("total_price").innerHTML = total;
+
+        } else {
+            document.getElementById("total_price").innerHTML = `${totalDescuento} 💸`;
+        }
+
         document.getElementById("cart_list").innerHTML += linea
+        }
     }
-    document.getElementById("total_price").innerHTML = calculateTotal() - descuento;
 }
 
 
@@ -233,12 +255,80 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    
+    for (let i = 0; i < products.length; i++) {
+
+        if (id == products[i].id) {
+
+            let encontrado = buscar(products[i].id);
+
+            if(encontrado == -1) {
+    
+                cart.push(products[i]);
+                cart[cart.length-1].cantidad = 1
+                cart[cart.length-1].subtotal = cart[cart.length-1].cantidad * cart[cart.length-1].price;
+                total += cart[cart.length-1].price;
+                
+            } else {
+    
+                cart[encontrado].cantidad += 1; 
+                cart[encontrado].subtotal = cart[encontrado].cantidad * cart[encontrado].price;
+                total += cart[encontrado].price;
+            }
+        }
+    }
+    applyPromotionsCart();
+
+    let promo = applyPromotionsCart();
+
+    if (promo > 1) {
+        totalDescuento = total - promo;
+    } else {
+        totalDescuento = 0;
+    }
+
+    printCart()
+    
+    console.log(cart)
+    console.log(total)
+    console.log(totalDescuento)
 }
 
 // Exercise 8
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+
+    for (let i = 0; i < products.length; i++) {
+
+        if (id == products[i].id) {
+
+            let encontrado = buscar(products[i].id);
+    
+                cart[encontrado].cantidad -= 1; 
+                cart[encontrado].subtotal = cart[encontrado].cantidad * cart[encontrado].price;
+                total -= cart[encontrado].price;
+
+                if (cart[encontrado].cantidad == 0) {
+                    cart.splice(encontrado, 1);
+                }
+        }
+    }
+    applyPromotionsCart();
+
+    let promo = applyPromotionsCart();
+
+    if (promo > 1) {
+        totalDescuento = total - promo;
+    } else {
+        totalDescuento = 0;
+    }
+
+    printCart()
+
+    console.log(cart)
+    console.log(total)
+    console.log(totalDescuento)
 }
 
 function open_modal(){

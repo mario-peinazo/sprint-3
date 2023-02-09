@@ -231,7 +231,7 @@ function printCart() {
         let linea = `<tr>
         <th scope="row">${cart[i].name}</th>
         <td>$${cart[i].price}</td>
-        <td class="text-center"><button onclick="addToCart(${cart[i].id})">+</button> ${cart[i].cantidad} <button onclick="removeFromCart(${cart[i].id})">-</button></td>
+        <td class="text-center"><button onclick="addToCart(${cart[i].id})" class="btn btn-outline-dark">+</button> ${cart[i].cantidad} <button onclick="removeFromCart(${cart[i].id})" class="btn btn-outline-dark">-</button></td>
         ${lineaPrecio}
         </tr>`;
 

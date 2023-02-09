@@ -1,0 +1,96 @@
+$primary: #FF9494;
+$secondary: #FFD1D1;
+
+$body-bg: #FFF5E4;
+
+header {
+    background-image: url('../images/fondo2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 350px;
+
+    .container {
+        max-width: 850px;
+    }
+}
+
+#imagen-1 {
+    background-image: url('../images/sec1-1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-2 {
+    background-image: url('../images/sec1-3.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-3 {
+    background-image: url('../images/sec1-2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-4 {
+    background-image: url('../images/sec2-1.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-5 {
+    background-image: url('../images/sec2-2.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-6 {
+    background-image: url('../images/sec2-3.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-7 {
+    background-image: url('../images/sec3-1.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-8 {
+    background-image: url('../images/sec3-3.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#imagen-9 {
+    background-image: url('../images/sec3-2.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card {
+  min-height: 500px;
+
+   .card-body {
+        .text-center {
+            background-color: #ffffff4d;
+            border-radius: 10px;
+            padding: 5px;
+        }
+    }    
+}
+
+$card-border-width: 0px;
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";
